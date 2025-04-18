@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { PlantsModule } from './plants/plants.module';
+import { PlantMetricsModule } from './plant-metrics/plant-metrics.module';
+import { WeatherModule } from './weather/weather.module';
 
 @Module({
   imports: [
@@ -15,6 +18,9 @@ import { AppService } from './app.service';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    PlantsModule,
+    PlantMetricsModule,
+    WeatherModule,
   ],
   controllers: [AppController],
   providers: [AppService],
