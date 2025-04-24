@@ -1,6 +1,6 @@
 // src/plants/entities/plant.entity.ts
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { PlantMetric } from '../../plant-metrics/entities/plant-mertic.entity';
+import { PlantMetric } from '../../plant-metrics/entities/plant-metric.entity';
 
 @Entity()
 export class Plant {
