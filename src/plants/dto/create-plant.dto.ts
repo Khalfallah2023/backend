@@ -1,48 +1,42 @@
-// src/plants/dto/create-plant.dto.ts
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsDate } from 'class-validator';
 
 export class CreatePlantDto {
-  @IsNotEmpty()
   @IsString()
   title: string;
 
-  @IsNotEmpty()
   @IsString()
   image: string;
 
   @IsString()
-  @IsOptional()
-  backgroundColor?: string;
+  backgroundColor: string;
 
   @IsString()
-  @IsOptional()
-  color?: string;
+  color: string;
 
   @IsNumber()
-  @IsOptional()
-  quantity?: number;
+  quantity: number;
 
+  @IsOptional()
+  @IsDate()
+  plantingDate?: Date;
+
+  @IsOptional()
+  @IsDate()
+  expectedHarvest?: Date;
+
+  @IsOptional()
   @IsString()
-  @IsOptional()
-  plantingDate?: string;
+  wateringSchedule?: string = 'Every 2 days';
 
+  @IsOptional()
+  @IsDate()
+  lastWatered?: Date;
+
+  @IsOptional()
   @IsString()
-  @IsOptional()
-  expectedHarvest?: string;
+  growthPhase?: string = 'Phase 1: Seedling';
 
-  @IsString()
   @IsOptional()
-  wateringSchedule?: string;
-
-  @IsString()
-  @IsOptional()
-  lastWatered?: string;
-
-  @IsString()
-  @IsOptional()
-  growthPhase?: string;
-
   @IsNumber()
-  @IsOptional()
-  growthProgress?: number;
+  growthProgress?: number = 0;
 }

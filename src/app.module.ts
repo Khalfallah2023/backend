@@ -5,6 +5,9 @@ import { AppService } from './app.service';
 import { PlantsModule } from './plants/plants.module';
 import { PlantMetricsModule } from './plant-metrics/plant-metrics.module';
 import { WeatherModule } from './weather/weather.module';
+import { UsersModule } from './users/user.module';
+import { AuthModule } from './auth/auth.module';
+import { UserPlantModule } from './user-plant/user-plant.module';
 
 @Module({
   imports: [
@@ -21,6 +24,9 @@ import { WeatherModule } from './weather/weather.module';
     PlantsModule,
     PlantMetricsModule,
     WeatherModule,
+    UsersModule,
+    AuthModule,
+    UserPlantModule,
   ],
   controllers: [AppController],
   providers: [AppService],

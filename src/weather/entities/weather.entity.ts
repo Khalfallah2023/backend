@@ -17,12 +17,8 @@ export class Weather {
   @Column('float')
   windSpeed: number;
 
-  @Column({ default: '1013 hPa' })
-  pressure: string;
-
-  @Column({ default: 'Partly Cloudy' })
-  condition: string;
-
+  
+  
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   timestamp: Date;
 }

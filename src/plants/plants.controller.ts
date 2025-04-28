@@ -1,4 +1,3 @@
-// src/plants/plants.controller.ts
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PlantsService } from './plants.service';
 import { CreatePlantDto } from './dto/create-plant.dto';
@@ -20,16 +19,16 @@ export class PlantsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.plantsService.findOne(+id);
+    return this.plantsService.findOne(id); // Ne plus convertir en nombre
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePlantDto: UpdatePlantDto) {
-    return this.plantsService.update(+id, updatePlantDto);
+    return this.plantsService.update(id, updatePlantDto); // Ne plus convertir en nombre
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.plantsService.remove(+id);
+    return this.plantsService.remove(id); // Ne plus convertir en nombre
   }
 }

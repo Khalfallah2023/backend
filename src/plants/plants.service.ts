@@ -1,4 +1,3 @@
-// src/plants/plants.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -15,14 +14,20 @@ export class PlantsService {
 
   async create(createPlantDto: CreatePlantDto): Promise<Plant> {
     const plant = this.plantsRepository.create(createPlantDto);
+    // L'ID sera généré automatiquement par la méthode @BeforeInsert
     return this.plantsRepository.save(plant);
   }
 
   async findAll(): Promise<Plant[]> {
-    return this.plantsRepository.find();
+    try {
+      return await this.plantsRepository.find();
+    } catch (error) {
+      console.error('Error fetching plants:', error);
+      throw error;
+    }
   }
 
-  async findOne(id: number): Promise<Plant> {
+  async findOne(id: string): Promise<Plant> {
     const plant = await this.plantsRepository.findOne({ 
       where: { id },
       relations: ['metrics'] 
@@ -35,7 +40,7 @@ export class PlantsService {
     return plant;
   }
 
-  async update(id: number, updatePlantDto: UpdatePlantDto): Promise<Plant> {
+  async update(id: string, updatePlantDto: UpdatePlantDto): Promise<Plant> {
     const plant = await this.findOne(id);
     
     // Mise à jour des propriétés
@@ -44,11 +49,24 @@ export class PlantsService {
     return this.plantsRepository.save(plant);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     const result = await this.plantsRepository.delete(id);
     
     if (result.affected === 0) {
       throw new NotFoundException(`Plant with ID ${id} not found`);
     }
+  }
+ 
+  async getPlantUsers(plantId: string) {
+    const plant = await this.plantsRepository.findOne({
+      where: { id: plantId },
+      relations: ['userPlants', 'userPlants.user']
+    });
+    
+    if (!plant) {
+      throw new NotFoundException(`Plant with ID ${plantId} not found`);
+    }
+    
+    return plant.userPlants.map(up => up.user);
   }
 }

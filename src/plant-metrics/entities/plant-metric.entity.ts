@@ -1,34 +1,44 @@
-// src/plant-metrics/entities/plant-metric.entity.ts
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
 import { Plant } from '../../plants/entities/plant.entity';
-
-export enum MetricType {
-  TEMPERATURE = 'temperature',
-  HUMIDITY = 'humidity',
-  PH = 'ph',
-  NITROGEN = 'nitrogen',
-  POTASSIUM = 'potassium',
-  CALCIUM = 'calcium',
-  PHOSPHORUS = 'phosphorus',
-}
 
 @Entity()
 export class PlantMetric {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    type: 'enum',
-    enum: MetricType,
-  })
-  type: MetricType;
+  @ManyToOne(() => Plant, plant => plant.metrics, { onDelete: 'CASCADE' })
+  plant: Plant;
 
-  @Column('float')
-  value: number;
-
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   timestamp: Date;
 
-  @ManyToOne(() => Plant, plant => plant.metrics)
-  plant: Plant;
+  @Column('float', { nullable: true })
+  ph: number;
+
+  @Column('float', { nullable: true })
+  temperature: number;
+
+  @Column('float', { nullable: true })
+  humidity: number;
+
+  @Column('float', { nullable: true })
+  nitrogen: number;
+
+  @Column('float', { nullable: true })
+  potassium: number;
+
+  @Column('float', { nullable: true })
+  calcium: number;
+
+  @Column('float', { nullable: true })
+  phosphorus: number;
+
+  @Column({ nullable: true })
+  pressure: string;
+
+  @Column({ nullable: true })
+  airQuality: string;
+
+  @Column({ nullable: true })
+  windSpeed: string;
 }

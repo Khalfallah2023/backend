@@ -1,11 +1,11 @@
-// src/plants/entities/plant.entity.ts
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn, BeforeInsert } from 'typeorm';
 import { PlantMetric } from '../../plant-metrics/entities/plant-metric.entity';
+import { UserPlant } from '../../user-plant/entities/user-plant.entity';
 
 @Entity()
 export class Plant {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  id: string; // Changé de number à string pour accueillir le format date+nom
 
   @Column()
   title: string;
@@ -14,13 +14,12 @@ export class Plant {
   image: string;
 
   @Column()
-  backgroundColor: string;
-
-  @Column()
   color: string;
 
   @Column()
   quantity: number;
+  @Column()
+backgroundColor: string;
 
   @Column({ nullable: true })
   plantingDate: Date;
@@ -40,6 +39,24 @@ export class Plant {
   @Column({ default: 0 })
   growthProgress: number;
 
+  @OneToMany(() => UserPlant, userPlant => userPlant.plant)
+  userPlants: UserPlant[];
+
   @OneToMany(() => PlantMetric, metric => metric.plant)
   metrics: PlantMetric[];
+
+  // Méthode pour générer automatiquement l'ID basé sur la date et le nom
+  @BeforeInsert()
+  generateId() {
+    if (this.plantingDate) {
+      const dateStr = this.plantingDate.toISOString().split('T')[0].replace(/-/g, '');
+      const namePart = this.title.toLowerCase().replace(/\s+/g, '-').substring(0, 20);
+      this.id = `${dateStr}-${namePart}`;
+    } else {
+      // Si pas de date de plantation, utiliser la date actuelle
+      const currentDate = new Date().toISOString().split('T')[0].replace(/-/g, '');
+      const namePart = this.title.toLowerCase().replace(/\s+/g, '-').substring(0, 20);
+      this.id = `${currentDate}-${namePart}`;
+    }
+  }
 }
